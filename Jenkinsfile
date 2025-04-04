@@ -32,18 +32,18 @@ pipeline {
         }
         stage('Tag docker image') {
             steps {
-                sh 'docker image tag $JOB_NAME:v.$BUILD_ID GovardhanReddysp/$JOB_NAME:v.$BUILD_ID'
+                sh 'docker image tag $JOB_NAME:v.$BUILD_ID govardhanreddysp/$JOB_NAME:v.$BUILD_ID'
                 }
         }
        stage ('push docker image to  dockerhub') {
             steps {
                 script {
-                   withCredentials([string(credentialsId: 'GovardhanReddysp1', variable: 'dockerpswd')]) {
+                   withCredentials([string(credentialsId: 'govardhanreddysp1', variable: 'dockerpswd')]) {
                         sh '''
-                        docker login -u GovardhanReddysp -p ${dockerpswd}
-                        docker image push GovardhanReddysp/$JOB_NAME:v.$BUILD_ID
+                        docker login -u govardhanreddysp -p ${dockerpswd}
+                        docker image push govardhanreddysp/$JOB_NAME:v.$BUILD_ID
                         docker rmi $JOB_NAME:v.$BUILD_ID
-                        docker rmi GovardhanReddysp/$JOB_NAME:v.$BUILD_ID
+                        docker rmi govardhanreddysp/$JOB_NAME:v.$BUILD_ID
                         ''' 
                         }
                     }
@@ -53,7 +53,7 @@ pipeline {
             steps {
                  sh '''
                  docker ps -q -f name=shopping-container && docker stop shopping-container && docker rm shopping-container || echo "Container not found or already stopped."
-                 docker run -d -p 9191:8181 --name shopping-container /$JOB_NAME GovardhanReddysp:v.$BUILD_ID
+                 docker run -d -p 9191:8181 --name shopping-container /$JOB_NAME govardhanreddysp:v.$BUILD_ID
                  '''
             }
         }
