@@ -38,9 +38,9 @@ pipeline {
        stage ('push docker image to  dockerhub') {
             steps {
                 script {
-                   withCredentials([string(credentialsId: 'dockerhub-password', variable: 'dockerhub_psd')]) {
+                   withCredentials([string(credentialsId: 'GovardhanReddysp', variable: 'dockerpswd')]) {
                         sh '''
-                        docker login -u GovardhanReddysp -p ${dockerhub_psd}
+                        docker login -u GovardhanReddysp -p ${dockerpswd}
                         docker image push GovardhanReddysp/$JOB_NAME:v.$BUILD_ID
                         docker rmi $JOB_NAME:v.$BUILD_ID
                         docker rmi GovardhanReddysp/$JOB_NAME:v.$BUILD_ID
