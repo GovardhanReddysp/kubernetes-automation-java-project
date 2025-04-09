@@ -1,21 +1,16 @@
 pipeline {
-    
     agent any 
-    
     stages {
         stage('Git Checkout'){
             steps{
                 script{
-                    git branch: 'newbranch', url: 'https://github.com/GovardhanReddysp/kubernetes-automation-java-project.git'
+                    git branch: 'newbranch', url: 'https://github.com/khadar099/kubernetes-automation-java-project.git'
                     }
                 }
             }
         stage('Maven build') {
-            
             steps {
-                
                 script{
-                    
                     sh 'mvn clean install'
                 }
             }
@@ -32,15 +27,15 @@ pipeline {
         }
         stage('Tag docker image') {
             steps {
-                sh 'docker image tag shopping:v.$BUILD_NUMBER govardhanreddysp/$JOB_NAME:v.$BUILD_NUMBER'
+                sh 'docker image tag shopping:v.$BUILD_NUMBER govardhanreddysp/shopping:v.$BUILD_NUMBER'
                 }
         }
        stage ('push docker image to  dockerhub') {
             steps {
                 script {
-                   withCredentials([string(credentialsId: 'dockerhubpswds', variable: 'dockerpswd')]) {
+                   withCredentials([string(credentialsId: 'dockerhubpswds', variable: 'dockerhubpswds')]) {
                         sh '''
-                        docker login -u govardhanreddysp -p ${dockerpswd}
+                        docker login -u govardhanreddysp -p ${dockerhubpswds}
                         docker image push govardhanreddysp/shopping:v.$BUILD_NUMBER
                         docker rmi shopping:v.$BUILD_NUMBER
                         docker rmi govardhanreddysp/shopping:v.$BUILD_NUMBER
