@@ -1,21 +1,16 @@
 pipeline {
-    
     agent any 
-    
     stages {
         stage('Git Checkout'){
             steps{
                 script{
-                    git branch: 'newbranch', url: 'https://github.com/GovardhanReddysp/kubernetes-automation-java-project.git'
+                    git branch: 'newbranch', url: 'https://github.com/khadar099/kubernetes-automation-java-project.git'
                     }
                 }
             }
         stage('Maven build') {
-            
             steps {
-                
                 script{
-                    
                     sh 'mvn clean install'
                 }
             }
@@ -27,12 +22,12 @@ pipeline {
         }
         stage('Docker image  build stage') {
             steps {
-                sh 'docker image build -t $JOB_NAME:v.$BUILD_ID .'
+                sh 'docker image build -t shopping:v.$BUILD_NUMBER .'
             }
         }
         stage('Tag docker image') {
             steps {
-                sh 'docker image tag $JOB_NAME:v.$BUILD_ID govardhanreddysp/$JOB_NAME:v.$BUILD_ID'
+                sh 'docker image tag shopping:v.$BUILD_NUMBER /shopping:v.$BUILD_NUMBER'
                 }
         }
        stage ('push docker image to  dockerhub') {
@@ -41,9 +36,9 @@ pipeline {
                    withCredentials([string(credentialsId: 'dockerhubpswds', variable: 'dockerpswd')]) {
                         sh '''
                         docker login -u govardhanreddysp -p ${dockerpswd}
-                        docker image push govardhanreddysp/$JOB_NAME:v.$BUILD_ID
-                        docker rmi $JOB_NAME:v.$BUILD_ID
-                        docker rmi govardhanreddysp/$JOB_NAME:v.$BUILD_ID
+                        docker image push govardhanreddysp/shopping:v.$BUILD_NUMBER
+                        docker rmi shopping:v.$BUILD_NUMBER
+                        docker rmi govardhanreddysp/shopping:v.$BUILD_NUMBER
                         ''' 
                         }
                     }
@@ -53,7 +48,7 @@ pipeline {
             steps {
                  sh '''
                  docker ps -q -f name=shopping-container && docker stop shopping-container && docker rm shopping-container || echo "Container not found or already stopped."
-                 docker run -d -p 9191:8181 --name shopping-container govardhanreddysp/$JOB_NAME:v.$BUILD_ID
+                 docker run -d -p 9191:8181 --name shopping-container govardhanreddysp/shopping:v.$BUILD_NUMBER
                  '''
             }
         }
