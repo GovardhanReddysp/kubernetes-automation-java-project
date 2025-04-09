@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Tag docker image') {
             steps {
-                sh 'docker image tag shopping:v.$BUILD_NUMBER /shopping:v.$BUILD_NUMBER'
+                sh 'docker image tag shopping:v.$BUILD_NUMBER govardhanreddysp/shopping:v.$BUILD_NUMBER'
                 }
         }
        stage ('push docker image to  dockerhub') {
