@@ -6,7 +6,7 @@ pipeline {
         stage('Git Checkout'){
             steps{
                 script{
-                    git branch: 'newbranch', url: 'https://github.com/GovardhanReddysp/kubernetes-automation-java-project.git'
+                    git branch: 'sit', url: 'https://github.com/GovardhanReddysp/kubernetes-automation-java-project.git'
                     }
                 }
             }
